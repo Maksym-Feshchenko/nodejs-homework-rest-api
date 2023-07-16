@@ -37,38 +37,53 @@ contactRouter.get("/:id", async (req, res, next) => {
     }
 })
 
-contactRouter.post("/", async(req, res, next) => {
-    try {
-        const { error } = contactAddSchema.validate(req.body);
-        if(error) {
-            throw HttpError(400, "missing required name field");
-        }
-        const result = await contactsService.addContact(req.body);
-        res.status(201).json(result);
+contactRouter.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      const missingField = error.details[0].context.key;
+      throw HttpError(400, `missing required "${missingField}" field`);
     }
-    catch (error) {
-        next(error);
-    }
-})
+    const result = await contactsService.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-contactRouter.put("/:id", async(req, res, next) => {
+contactRouter.put("/:id", async (req, res, next) => {
     try {
-        const { error } = contactAddSchema.validate(req.body);
-        if(error) {
-            throw HttpError(400, "missing fields");
+      if (Object.keys(req.body).length === 0) {
+        throw  HttpError(400, "missing fields");
+      }
+  
+      const requiredFields = ["name", "email", "phone"];
+      const missingFields = [];
+  
+      for (const field of requiredFields) {
+        if (!(field in req.body)) {
+          missingFields.push(field);
         }
-        const {id} = req.params;
-        const result = await contactsService.UpdateContactById(id, req.body);
-        if(!result) {
-            throw HttpError(404, "Not found")
-        }
-        res.json(result);
+      }
+  
+      if (missingFields.length > 0) {
+        const missingField = missingFields[0];
+        throw  HttpError(400, `missing required "${missingField}" field`);
+      }
+  
+      const { id } = req.params;
+      const result = await contactsService.UpdateContactById(id, req.body);
+  
+      if (!result) {
+        throw  HttpError(404, "Not found");
+      }
+  
+      res.json(result);
+    } catch (error) {
+      next(error);
     }
-    catch(error) {
-        next(error);
-    }
-})
-
+  });
+  
 contactRouter.delete("/:id", async(req, res, next) =>{
     try {
         const {id} = req.params;
