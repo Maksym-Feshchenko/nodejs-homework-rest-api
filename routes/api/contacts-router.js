@@ -6,7 +6,7 @@ import {validateBody} from "../../decorators/index.js";
 
 import {contactSchema} from "../../schemas/index.js";
 
-import {isEmptyBody, isValidId, isValidIdFavorite} from "../../middlewares/index.js";
+import {isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
@@ -18,7 +18,7 @@ contactsRouter.post("/", isEmptyBody,  validateBody(contactSchema.contactAddSche
 
 contactsRouter.put("/:id", isValidId, isEmptyBody, validateBody(contactSchema.contactAddSchema), contactsController.updateById);
  
-contactsRouter.patch("/:id/favorite", isValidIdFavorite, isEmptyBody, validateBody(contactSchema.contactUpdateFavoriteSchema), contactsController.updateFavorite);
+contactsRouter.patch("/:id/favorite", isValidId, isEmptyBodyFavorite, validateBody(contactSchema.contactUpdateFavoriteSchema), contactsController.updateFavorite);
 
 contactsRouter.delete("/:id", isValidId, contactsController.deleteById)
 
