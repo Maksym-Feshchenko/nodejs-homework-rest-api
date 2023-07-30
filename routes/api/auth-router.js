@@ -19,7 +19,4 @@ authRouter.get("/current", authenticate, authController.getCurrent)
 
 authRouter.post("/logout", authenticate, authController.logout);
 
-// router.get("/signout", authenticate, controllerWrapper(ctrl.signOut));
-// router.get("/current", authenticate, controllerWrapper(ctrl.currentUser));
-
 export default authRouter;
