@@ -74,10 +74,11 @@ const logout = async (req, res)=> {
     const {_id} = req.user;
     await User.findByIdAndUpdate(_id, {token: ""});
     
-    res.json({
-        status: 204,
-        message: "No Content",
-    })
+    res.status(204).json({message: "No Content"})
+    // res.json({
+    //     status: 204,
+    //     message: "No Content",
+    // })
 }
 
 export default {
