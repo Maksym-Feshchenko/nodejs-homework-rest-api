@@ -6,9 +6,13 @@ import {validateBody} from "../../decorators/index.js";
 
 import {contactSchema} from "../../schemas/index.js";
 
-import {isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
+import { isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
+
+import authenticate from "../../middlewares/authenticate.js"
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll)
 
