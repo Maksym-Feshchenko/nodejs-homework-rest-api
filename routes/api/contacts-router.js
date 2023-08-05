@@ -6,7 +6,8 @@ import {validateBody} from "../../decorators/index.js";
 
 import {contactSchema} from "../../schemas/index.js";
 
-import { isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
+import { upload, isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
+
 
 import authenticate from "../../middlewares/authenticate.js"
 
@@ -19,6 +20,7 @@ contactsRouter.get("/", contactsController.getAll)
 contactsRouter.get("/:id", isValidId, contactsController.getById)
 
 contactsRouter.post("/", isEmptyBody,  validateBody(contactSchema.contactAddSchema), contactsController.add);
+//upload.single("avatar"),
 
 contactsRouter.put("/:id", isValidId, isEmptyBody, validateBody(contactSchema.contactAddSchema), contactsController.updateById);
  
