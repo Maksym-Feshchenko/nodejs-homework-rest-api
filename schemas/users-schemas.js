@@ -20,8 +20,8 @@ const userEmailSchema = Joi.object({
     "string.email": `Invalid email format.`,
     "string.empty": `Email cannot be an empty field.`,
     "string.pattern.base": `Invalid email format.`,
-    "any.required": `Email is a required field.`,
-    //"any.required": `missing required field email.`,
+    // "any.required": `Email is a required field.`,
+    "any.required": `missing required field email.`,
   }),
 })
 

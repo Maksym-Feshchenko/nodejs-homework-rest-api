@@ -43,13 +43,13 @@ const signup = async( req, res )=> {
     })   
 }
 
-const verifyEmail = async(req, res)=> {   
+const verify = async(req, res)=> {   
     const {verificationToken} = req.params;
     const user = await User.findOne({verificationToken});
     if(!user){
         throw HttpError(404, "User not found");
     }
-    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: "" });
+    await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: verificationToken });
 
     res.json ({
         message: "Verification successful",
@@ -59,10 +59,11 @@ const verifyEmail = async(req, res)=> {
 const resendVerifyEmail = async(req, res)=> {
     const {email} = req.body;
     const user = await User.findOne({email});
-    if(!user){
+    if(!user) {
         throw HttpError(404, "User not found")
     }
-    if(user.verifyEmail) {
+
+    if(user.verify) {
         throw HttpError(400, "Verification has already been passed")
     }
     const verifyEmail = {
@@ -146,6 +147,6 @@ export default {
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateAvatar: ctrlWrapper(updateAvatar),
-    verifyEmail: ctrlWrapper(verifyEmail),
+    verify: ctrlWrapper(verify),
     resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 }
